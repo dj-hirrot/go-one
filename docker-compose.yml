@@ -1,9 +1,20 @@
 version: '3'
 
 services:
-  mysql:
+  db:
     build: ./docker/mysql/
     volumes:
       - ./docker/mysql/db:/docker-entrypoint-initdb.d
     environment:
       - MYSQL_ROOT_PASSWORD=root
+
+  api:
+    build:
+      context: .
+      dockerfile: ./docker/api/Dockerfile
+    volumes:
+      - ./:/go/src/one
+    ports:
+      - "8080:8080"
+    depends_on:
+      - db
